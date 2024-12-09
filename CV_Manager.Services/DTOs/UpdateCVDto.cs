@@ -10,7 +10,8 @@ namespace CV_Manager.Services.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int PersonalInformationId { get; set; }
-        public int ExperienceInformationId { get; set; }
+
+        public UpdatePersonalInformationDto PersonalInformationDto { get; set; }
+        public UpdateExperienceInformationDto ExperienceInformationDto { get; set; }
     }
 }

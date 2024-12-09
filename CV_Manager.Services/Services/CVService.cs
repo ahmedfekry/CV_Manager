@@ -11,12 +11,18 @@ namespace CV_Manager.Services.Services
 {
     public class CVService
     {
-        public CVService(ICVRepository cVRepository)
+        public CVService(ICVRepository cVRepository,
+                         IPersonalInformationRepository personalInformationRepository,
+                         IExperienceInformationRepository experienceInformationRepository)
         {
             _CVRepository = cVRepository;
+            this._personalInformationRepository = personalInformationRepository;
+            this._experienceInformationRepository = experienceInformationRepository;
         }
 
         public readonly ICVRepository _CVRepository;
+        private readonly IPersonalInformationRepository _personalInformationRepository;
+        private readonly IExperienceInformationRepository _experienceInformationRepository;
 
         public async Task<CVDto?> GetByIdAsync(int id)
         {
@@ -27,7 +33,7 @@ namespace CV_Manager.Services.Services
             {
                 Id = cv.Id,
                 Name = cv.Name,
-                PersonalInformation = new PersonalInformationDto
+                PersonalInformationDto = new PersonalInformationDto
                 {
                     Id = cv.PersonalInformation.Id,
                     CityName = cv.PersonalInformation.CityName,
@@ -35,7 +41,7 @@ namespace CV_Manager.Services.Services
                     FullName = cv.PersonalInformation.FullName,
                     MobileNumber = cv.PersonalInformation.MobileNumber
                 },
-                ExperienceInformation = new ExperienceInformationDto
+                ExperienceInformationDto = new ExperienceInformationDto
                 {
                     Id=cv.ExperienceInformation.Id,
                     City=cv.ExperienceInformation.City,
@@ -52,7 +58,7 @@ namespace CV_Manager.Services.Services
             {
                 Id = cv.Id,
                 Name = cv.Name,
-                PersonalInformation = new PersonalInformationDto
+                PersonalInformationDto = new PersonalInformationDto
                 {
                     Id = cv.PersonalInformation.Id,
                     CityName = cv.PersonalInformation.CityName,
@@ -60,7 +66,7 @@ namespace CV_Manager.Services.Services
                     FullName = cv.PersonalInformation.FullName,
                     MobileNumber = cv.PersonalInformation.MobileNumber
                 },
-                ExperienceInformation = new ExperienceInformationDto
+                ExperienceInformationDto = new ExperienceInformationDto
                 {
                     Id = cv.ExperienceInformation.Id,
                     City = cv.ExperienceInformation.City,
@@ -72,11 +78,30 @@ namespace CV_Manager.Services.Services
 
         public async Task AddAsync(CreateCVDto cvDto)
         {
+            var personalInformation = new PersonalInformation
+            {
+                CityName = cvDto.PersonalInformationDto.CityName,
+                Email = cvDto.PersonalInformationDto.Email,
+                FullName = cvDto.PersonalInformationDto.FullName,
+                MobileNumber = cvDto.PersonalInformationDto.MobileNumber
+            };
+
+            await _personalInformationRepository.AddAsync(personalInformation);
+
+            var experienceInformation = new ExperienceInformation
+            {
+                CompanyName = cvDto.ExperienceInformationDto.CompanyName,
+                CompanyField = cvDto.ExperienceInformationDto.CompanyField,
+                City = cvDto.ExperienceInformationDto.City
+            };
+
+            await _experienceInformationRepository.AddAsync(experienceInformation);
+
             var cv = new CV
             {
                 Name = cvDto.Name,
-                PersonalInformationId = cvDto.PersonalInformationId,
-                ExperienceInformationId = cvDto.ExperienceInformationId
+                PersonalInformationId = personalInformation.Id,
+                ExperienceInformationId = experienceInformation.Id
                 
             };
 
@@ -89,9 +114,31 @@ namespace CV_Manager.Services.Services
             if (cv != null)
             {
                 cv.Name = cvDto.Name;
-                cv.PersonalInformationId = cvDto.PersonalInformationId;
-
                 await _CVRepository.UpdateAsync(cv);
+
+
+                var personalInformation = await _personalInformationRepository.GetByIdAsync(cv.PersonalInformationId);
+                if (personalInformation != null)
+                {
+                    personalInformation.MobileNumber = cvDto.PersonalInformationDto.MobileNumber;
+                    personalInformation.CityName = cvDto.PersonalInformationDto.CityName;
+                    personalInformation.Email = cvDto.PersonalInformationDto.Email;
+                    personalInformation.FullName = cvDto.PersonalInformationDto.FullName;
+
+                    await _personalInformationRepository.UpdateAsync(personalInformation);
+                }
+
+                var experientInformation = await _experienceInformationRepository.GetByIdAsync(cv.ExperienceInformationId);
+                if (experientInformation != null)
+                {
+                    experientInformation.City = cvDto.ExperienceInformationDto.City;
+                    experientInformation.CompanyName = cvDto.ExperienceInformationDto.CompanyName;
+                    experientInformation.City = cvDto.ExperienceInformationDto?.City;
+                    experientInformation.CompanyField = cvDto.ExperienceInformationDto?.CompanyField;
+
+                    await _experienceInformationRepository.UpdateAsync(experientInformation);
+                }
+
             }
         }
 

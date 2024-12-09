@@ -11,9 +11,8 @@ namespace CV_Manager.Services.DTOs
     {
         [Required]
         public string Name { get; set; } = string.Empty;
-        [Required]
-        public int PersonalInformationId { get; set; }
-        [Required]
-        public int ExperienceInformationId { get; set; }
+        public CreateExperienceInformationDto ExperienceInformationDto { get; set; }
+        public CreatePersonalInformationDto PersonalInformationDto { get; set; }
+
     }
 }

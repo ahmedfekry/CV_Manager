@@ -1,0 +1,99 @@
+<div class="container mt-4">
+  <h2>Create New CV</h2>
+  <div class="row justify-content-center">
+    <div class="col-6 ">
+      <form [formGroup]="cvForm" (ngSubmit)="onSubmit()">
+
+        <!-- CV Name -->
+        <div class="form-group mb-3">
+          <label for="name">CV Name</label>
+          <input id="name" formControlName="name" class="form-control" />
+          <div *ngIf="name?.invalid && (name?.touched || name?.dirty)" class="text-danger">
+            <small *ngIf="name?.errors?.['required']">Name is required.</small>
+          </div>
+        </div>
+
+        <!-- Personal Information Section -->
+        <div formGroupName="personalInformationDto" class="mb-4">
+          <h4>Personal Information</h4>
+
+          <!-- Full Name -->
+          <div class="form-group mb-3">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" formControlName="fullName" class="form-control" />
+            <div *ngIf="personalInformation.get('fullName')?.invalid && (personalInformation.get('fullName')?.touched || personalInformation.get('fullName')?.dirty)" class="text-danger">
+              <small *ngIf="personalInformation.get('fullName')?.errors?.['required']">Full Name is required.</small>
+              <small *ngIf="personalInformation.get('fullName')?.errors?.['maxLength']">Full Name cannot exceed 100 characters.</small>
+            </div>
+          </div>
+
+          <!-- City Name -->
+          <div class="form-group mb-3">
+            <label for="cityName">City Name</label>
+            <input id="cityName" formControlName="cityName" class="form-control" />
+          </div>
+
+          <!-- Email -->
+          <div class="form-group mb-3">
+            <label for="email">Email</label>
+            <input id="email" formControlName="email" class="form-control" type="email" />
+            <div *ngIf="personalInformation.get('email')?.invalid && (personalInformation.get('email')?.touched || personalInformation.get('email')?.dirty)" class="text-danger">
+              <small *ngIf="personalInformation.get('email')?.errors?.['required']">Email is required.</small>
+              <small *ngIf="personalInformation.get('email')?.errors?.['email']">Enter a valid email.</small>
+            </div>
+          </div>
+
+          <!-- Mobile Number -->
+          <div class="form-group mb-3">
+            <label for="mobileNumber">Mobile Number</label>
+            <input id="mobileNumber" formControlName="mobileNumber" class="form-control" />
+            <div *ngIf="personalInformation.get('mobileNumber')?.invalid && (personalInformation.get('mobileNumber')?.touched || personalInformation.get('mobileNumber')?.dirty)" class="text-danger">
+              <small *ngIf="personalInformation.get('mobileNumber')?.errors?.['required']">Mobile Number is required.</small>
+              <small *ngIf="personalInformation.get('mobileNumber')?.errors?.['pattern']">Mobile Number must contain only numbers.</small>
+              <small *ngIf="personalInformation.get('mobileNumber')?.errors?.['maxLength']">Mobile Number cannot exceed 15 digits.</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience Information Section -->
+        <div formGroupName="experienceInformationDto" class="mb-4">
+          <h4>Experience Information</h4>
+
+          <!-- Company Name -->
+          <div class="form-group mb-3">
+            <label for="companyName">Company Name</label>
+            <input id="companyName" formControlName="companyName" class="form-control" />
+            <div *ngIf="experienceInformation.get('companyName')?.invalid && (experienceInformation.get('companyName')?.touched || experienceInformation.get('companyName')?.dirty)" class="text-danger">
+              <small *ngIf="experienceInformation.get('companyName')?.errors?.['required']">Company Name is required.</small>
+              <small *ngIf="experienceInformation.get('companyName')?.errors?.['maxLength']">Company Name cannot exceed 100 characters.</small>
+            </div>
+          </div>
+
+          <!-- Job Title -->
+          <div class="form-group mb-3">
+            <label for="City">City</label>
+            <input id="City" formControlName="City" class="form-control" />
+            <div *ngIf="experienceInformation.get('City')?.invalid && (experienceInformation.get('City')?.touched || experienceInformation.get('City')?.dirty)" class="text-danger">
+              <small *ngIf="experienceInformation.get('City')?.errors?.['required']">City is required.</small>
+              <small *ngIf="experienceInformation.get('City')?.errors?.['maxLength']">City cannot exceed 100 characters.</small>
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="CompanyField">Company Field</label>
+            <input id="CompanyField" formControlName="CompanyField" class="form-control" type="text" />
+          </div>
+        </div>
+
+        <div *ngIf="submissionError" class="alert alert-danger">
+          {{ submissionError }}
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <button type="submit" class="btn btn-primary" [disabled]="cvForm.invalid">Submit</button>
+        <button type="button" class="btn btn-secondary ms-2" routerLink="/cv">Cancel</button>
+      </form>
+    </div>
+  </div>
+  
+</div>

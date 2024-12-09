@@ -1,0 +1,27 @@
+<div class="container mt-4">
+  <h1>List of CVs</h1>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <a class="btn btn-primary" [routerLink]="'/cv/create'">Create New CV</a>
+  </div>
+  <table class="table table-stripped">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Delete/Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cv of cvs">
+        <td>{{cv.id}}</td>
+        <td>{{cv.name}}</td>
+        <td>
+          <button class="btn btn-primary" [routerLink]="['/cv/edit', cv.id]">
+            Edit
+          </button>
+          <button class="btn btn-warning" (click)="delete(cv.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

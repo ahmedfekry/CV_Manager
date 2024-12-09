@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <h2>Edit CV</h2>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <!-- Name -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" id="name" class="form-control" formControlName="name" />
+      <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched" class="text-danger">
+        Name is required.
+      </div>
+    </div>
+
+    <!-- Personal Information -->
+    <fieldset formGroupName="personalInformationDto">
+      <legend>Personal Information</legend>
+      <div class="mb-3">
+        <label for="fullName" class="form-label">Full Name</label>
+        <input type="text" id="fullName" class="form-control" formControlName="fullName" />
+        <div *ngIf="editForm.get('personalInformationDto.fullName')?.invalid && editForm.get('personalInformationDto.fullName')?.touched" class="text-danger">
+          Full Name is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" class="form-control" formControlName="email" />
+        <div *ngIf="editForm.get('personalInformationDto.email')?.invalid && editForm.get('personalInformationDto.email')?.touched" class="text-danger">
+          Invalid email format.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="mobileNumber" class="form-label">Mobile Number</label>
+        <input type="text" id="mobileNumber" class="form-control" formControlName="mobileNumber" />
+        <div *ngIf="editForm.get('personalInformationDto.mobileNumber')?.invalid && editForm.get('personalInformationDto.mobileNumber')?.touched" class="text-danger">
+          Phone number must be numeric.
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Experience Information -->
+    <fieldset formGroupName="experienceInformationDto">
+      <legend>Experience Information</legend>
+      <div class="mb-3">
+        <label for="companyName" class="form-label">Company Name</label>
+        <input type="text" id="companyName" class="form-control" formControlName="companyName" />
+        <div *ngIf="editForm.get('experienceInformationDto.companyName')?.invalid && editForm.get('experienceInformationDto.companyName')?.touched" class="text-danger">
+          Company Name is required.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="companyField" class="form-label">Company Field</label>
+        <input type="text" id="companyField" class="form-control" formControlName="companyField" />
+      </div>
+    </fieldset>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
+      Update CV
+    </button>
+  </form>
+</div>
